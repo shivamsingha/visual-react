@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
-import { Box, Button, Diagram, Heading, Grommet, Stack } from 'grommet';
-import { Notification } from 'grommet-icons';
+import { 
+  Box, 
+  Button, 
+  Diagram, 
+  Layer,
+  Heading, 
+  Grommet, 
+  ResponsiveContext,
+  Collapsible,
+  Stack 
+} from 'grommet';
+import { Notification, FormClose } from 'grommet-icons';
 
 const theme = {
   global: {
@@ -30,35 +40,76 @@ const SideBar = (props) => (
     align='center'
     background='accent-1'
     width='medium'
-    elevation='small'
     justify='center'
     {...props}
   />
 );
 
+class closeButton extends Component {
+  renderx() {
+    return(
+      <Box>b</Box>
+    );
+  }
+}
+
 class App extends Component {
+  state = {
+    showSidebar: true,
+  }
+
   /*returnStack() {
     return <linkedlist/>;
   }*/
 
   render() {
+    const {showSidebar}=this.state;
     return (
       <Grommet theme={theme} full>
-        <Box fill>
-          <AppBar>
-            Texteru
-            <Heading level='3' margin='none'>Heading</Heading>
-            <Button icon={<Notification />} onclick='() => {}' />
-          </AppBar>
-          <Box direction='row' flex overflow={{horizontal:'hidden'}}>
-            <Box flex align='center' justify='center'>
-              body
+        <ResponsiveContext.Consumer>
+          {size =>(
+            <Box fill>
+              <AppBar>
+                Texteru
+                <Heading level='3' margin='none'>Heading</Heading>
+                <Button icon={<Notification />} onClick={() => this.setState({showSidebar: !this.state.showSidebar})} />
+              </AppBar>
+              <Box direction='row' flex overflow={{horizontal:'hidden'}}>
+                <Box flex align='center' justify='center'>
+                  body
+                </Box>
+                {(!showSidebar || size !== 'small') 
+                  ?(
+                    <Collapsible direction='horizontal' open={showSidebar}>
+                        <SideBar flex>
+                          jcutjc
+                        </SideBar>
+                    </Collapsible>
+                  ) 
+                  :(
+                    <Layer>
+                      <Box
+                        background='light-2'
+                        tag='header'
+                        justify='end'
+                        align='center'
+                        direction='row'
+                      >
+                        <Button
+                          icon={<FormClose />}
+                          onClick={() => this.setState({ showSidebar: false })}
+                        />
+                      </Box>
+                      <SideBar fill>
+                        jasfasd
+                      </SideBar>
+                    </Layer>
+                  )
+                }
+              </Box>
             </Box>
-            <SideBar>
-              {/*this.returnStack()*/}
-            </SideBar>
-          </Box>
-        </Box>
+          )}
+        </ResponsiveContext.Consumer>
       </Grommet>
     );
   }
