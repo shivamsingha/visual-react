@@ -1,8 +1,10 @@
 pipeline {
-    agent docker {
-        image 'node:alpine'
-        label 'nodejs'
-        args '-p 127.0.0.1:3000:3000/tcp'
+    agent {
+        docker {
+            image 'node:alpine'
+            label 'nodejs'
+            args '-p 127.0.0.1:3000:3000/tcp'
+        }
     }
     stages {
         stage('Build') {
