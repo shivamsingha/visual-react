@@ -2,7 +2,6 @@ pipeline {
     agent {
         docker {
             image 'node:alpine'
-            label 'node'
             args '-p 127.0.0.1:3000:3000/tcp'
         }
     }
