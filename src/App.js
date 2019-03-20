@@ -8,9 +8,12 @@ import {
   Grommet, 
   ResponsiveContext,
   Collapsible,
-  Stack 
+  Stack,
+  Drop,
+  FormField,
+  TextInput
 } from 'grommet';
-import { Notification, FormClose } from 'grommet-icons';
+import { Next, Previous, FormClose, HostMaintenance, Launch, Trash, Upload, Download } from 'grommet-icons';
 
 const theme = {
   global: {
@@ -29,7 +32,7 @@ const AppBar = (props) => (
     direction='row-responsive' 
     elevation='medium' 
     justify='between' 
-    tag='header'
+    as='header'
     pad='medium'
     {...props}
   />
@@ -39,11 +42,24 @@ const SideBar = (props) => (
   <Box
     align='center'
     background='accent-1'
-    width='medium'
     justify='center'
+    flex='grow'
+    responsive
     {...props}
   />
 );
+//width='large'
+const SideBarButton = (props) => (
+  <Button
+    color='light' 
+    size='medium' 
+    margin='none' 
+    align='center'
+    alignSelf='center' 
+    fill={true}
+    {...props}
+  />
+)
 
 class closeButton extends Component {
   renderx() {
@@ -56,14 +72,30 @@ class closeButton extends Component {
 class App extends Component {
   state = {
     showSidebar: true,
+    status: false,
+    createClicked:false
   }
+
+  _create = () => this.setState({status: true, createClicked: false});
+  onCreate = () => this.setState({createClicked: true});
+  onCloseDrop = () => this.setState({createClicked: false});
+  CreateButtonRef = React.createRef();
+
+  onSizeInput = event => {
+    const {
+      taget: { value }
+    } = event;
+    //const exp = new RegExp(value, "i");
+    //const suggestions = allSuggestions.filter(s => exp.test(s));
+    this.setState({ value});  //, suggestions });
+  };
 
   /*returnStack() {
     return <linkedlist/>;
   }*/
 
   render() {
-    const {showSidebar}=this.state;
+    const {showSidebar, status, createClicked, value}=this.state;
     return (
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
@@ -72,21 +104,51 @@ class App extends Component {
               <AppBar>
                 Texteru
                 <Heading level='3' margin='none'>Heading</Heading>
-                <Button icon={<Notification />} onClick={() => this.setState({showSidebar: !this.state.showSidebar})} />
               </AppBar>
-              <Box direction='row' flex overflow={{horizontal:'hidden'}}>
-                <Box flex align='center' justify='center'>
-                  body
+              {(size === 'small') ?(
+                <Box
+                  background='dark-3'
+                  pad='none'
+                  margin='none'
+                >
+                  <SideBarButton icon={<HostMaintenance />} onClick={() => this.setState({showSidebar: !this.state.showSidebar})} />
                 </Box>
-                {(!showSidebar || size !== 'small') 
-                  ?(
+                ):(null)
+              }
+              <Box direction='row-responsive' flex overflow={{horizontal:'hidden'}}>
+                {(!showSidebar || size !== 'small') ?(
                     <Collapsible direction='horizontal' open={showSidebar}>
-                        <SideBar flex>
-                          jcutjc
-                        </SideBar>
+                      <SideBar flex margin='none'>
+                        <Box fill pad='large'>
+                          <Button margin={{vertical: 'small'}} 
+                            icon={(status)?<Trash />:<Launch />} label={(status)?'Remove':'Create'} 
+                            onClick={(status)?(null):this.onCreate} ref={this.CreateButtonRef} primary
+                          />
+                          {(createClicked) && //(!status) &&
+                            <Drop target={this.CreateButtonRef.current}
+                              onClickOutside={this.onCloseDrop}
+                              onEsc={this.onCloseDrop}
+                            >
+                              <Box direction='row' align='center' pad='small' fill>
+                                <Box flex margin={{horizontal: 'medium'}}>
+                                  <FormField htmlFor="size">
+                                    <TextInput id="size" placeholder="Enter size of stack" 
+                                      onChange={this.onSizeInput} value={value}
+                                    ></TextInput>
+                                  </FormField>
+                                </Box>
+                                <Box flex='shrink' margin={{horizontal: 'medium'}}>
+                                  <Button label='Create' onClick={this._create} />
+                                </Box>
+                              </Box>
+                            </Drop>
+                          }
+                          <Button label='Push' icon={<Download />} margin={{vertical: 'small'}} />
+                          <Button label='Pop' icon={<Upload />} margin={{vertical: 'small'}} />
+                        </Box>
+                      </SideBar>
                     </Collapsible>
-                  ) 
-                  :(
+                  ):(
                     <Layer>
                       <Box
                         background='light-2'
@@ -101,11 +163,49 @@ class App extends Component {
                         />
                       </Box>
                       <SideBar fill>
-                        jasfasd
+                        <Box fill={true} pad='large'>
+                          <Button icon={(status)?<Trash />:<Launch />} label={(status)?'Remove':'Create'} 
+                            onClick={(status)?(null):this.onCreate} ref={this.CreateButtonRef} primary
+                          />
+                          {(createClicked) && //(!status) &&
+                            <Drop target={this.CreateButtonRef.current}
+                              onClickOutside={this.onCloseDrop}
+                              onEsc={this.onCloseDrop}
+                            >
+                              <Box direction='row' align='center' pad='small' fill>
+                                <Box flex margin={{horizontal: 'medium'}}>
+                                  <FormField htmlFor="size">
+                                    <TextInput id="size" placeholder="Enter size of stack" value={value}
+                                      onChange={this.onSizeInput}
+                                    ></TextInput>
+                                  </FormField>
+                                </Box>
+                                <Box flex='shrink' margin={{horizontal: 'medium'}}>
+                                <Button label='Create' onClick={this._create} />
+                                </Box>
+                              </Box>
+                            </Drop>
+                          }
+                          <Button label='Push' icon={<Download />} margin={{vertical: 'small'}} />
+                          <Button label='Pop' icon={<Upload />} margin={{vertical: 'small'}} />
+                        </Box>
                       </SideBar>
                     </Layer>
-                  )
-                }
+                  )}
+                  {(size !== 'small')
+                    ?(
+                      <Box
+                        background='dark-3'
+                        pad='none'
+                      >
+                        <SideBarButton icon={(showSidebar)?(<Previous />):(<Next />)} onClick={() => this.setState({showSidebar: !this.state.showSidebar})}
+                        />
+                      </Box>
+                    ):(null)
+                  }
+                <Box flex align='center' justify='center'>
+                  body
+                </Box>
               </Box>
             </Box>
           )}
