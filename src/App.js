@@ -14,6 +14,7 @@ import {
   TextInput
 } from 'grommet';
 import { Next, Previous, FormClose, HostMaintenance, Launch, Trash, Upload, Download } from 'grommet-icons';
+import { NumberInput } from 'grommet-controls';
 
 const theme = {
   global: {
@@ -56,10 +57,19 @@ const SideBarButton = (props) => (
     margin='none' 
     align='center'
     alignSelf='center' 
-    fill={true}
+    fill
     {...props}
   />
-)
+);
+
+const NodeBox = ({id, data, exist, ...props}) => (
+  <Box 
+    border={{style:'dashed', size:'small'}} 
+    background='accent-2' 
+    flex='grow'
+    {...props}
+  />
+);
 
 class closeButton extends Component {
   renderx() {
@@ -73,7 +83,8 @@ class App extends Component {
   state = {
     showSidebar: true,
     status: false,
-    createClicked:false
+    createClicked:false,
+    sizeval:0
   }
 
   _create = () => this.setState({status: true, createClicked: false});
@@ -83,11 +94,12 @@ class App extends Component {
 
   onSizeInput = event => {
     const {
-      taget: { value }
+      target: { value }
     } = event;
+    let newval = Number(value);
     //const exp = new RegExp(value, "i");
     //const suggestions = allSuggestions.filter(s => exp.test(s));
-    this.setState({ value});  //, suggestions });
+    this.setState({ sizeval: newval });  //, suggestions });
   };
 
   /*returnStack() {
@@ -95,7 +107,7 @@ class App extends Component {
   }*/
 
   render() {
-    const {showSidebar, status, createClicked, value}=this.state;
+    const {showSidebar, status, createClicked, sizeval}=this.state;
     return (
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
@@ -105,7 +117,7 @@ class App extends Component {
                 Texteru
                 <Heading level='3' margin='none'>Heading</Heading>
               </AppBar>
-              {(size === 'small') ?(
+              {(size === 'small') && 
                 <Box
                   background='dark-3'
                   pad='none'
@@ -113,7 +125,6 @@ class App extends Component {
                 >
                   <SideBarButton icon={<HostMaintenance />} onClick={() => this.setState({showSidebar: !this.state.showSidebar})} />
                 </Box>
-                ):(null)
               }
               <Box direction='row-responsive' flex overflow={{horizontal:'hidden'}}>
                 {(!showSidebar || size !== 'small') ?(
@@ -131,11 +142,10 @@ class App extends Component {
                             >
                               <Box direction='row' align='center' pad='small' fill>
                                 <Box flex margin={{horizontal: 'medium'}}>
-                                  <FormField htmlFor="size">
-                                    <TextInput id="size" placeholder="Enter size of stack" 
-                                      onChange={this.onSizeInput} value={value}
-                                    ></TextInput>
-                                  </FormField>
+                                  <NumberInput id="size" placeholder="Enter size of stack" 
+                                    value={sizeval} min={0}
+                                    onChange={this.onSizeInput}
+                                  />
                                 </Box>
                                 <Box flex='shrink' margin={{horizontal: 'medium'}}>
                                   <Button label='Create' onClick={this._create} />
@@ -174,14 +184,13 @@ class App extends Component {
                             >
                               <Box direction='row' align='center' pad='small' fill>
                                 <Box flex margin={{horizontal: 'medium'}}>
-                                  <FormField htmlFor="size">
-                                    <TextInput id="size" placeholder="Enter size of stack" value={value}
-                                      onChange={this.onSizeInput}
-                                    ></TextInput>
-                                  </FormField>
+                                  <NumberInput id="size" placeholder="Enter size of stack" 
+                                    value={sizeval} min={0}
+                                    onChange={({ target: { sizeval } }) => this.setState({ sizeval: sizeval })}
+                                  />
                                 </Box>
                                 <Box flex='shrink' margin={{horizontal: 'medium'}}>
-                                <Button label='Create' onClick={this._create} />
+                                  <Button label='Create' onClick={this._create} />
                                 </Box>
                               </Box>
                             </Drop>
@@ -203,8 +212,16 @@ class App extends Component {
                       </Box>
                     ):(null)
                   }
-                <Box flex align='center' justify='center'>
-                  body
+                <Box flex align='center' justify='center' margin={{horizontal:'medium', vertical:'none'}}>
+                  {status && 
+                    <Box pad={{horizontal:'xlarge', vertical:'none'}} fill>
+                      {(sizeval) && ([...Array(sizeval).keys()].map(id => (
+                        <NodeBox id={id} key={id}>
+                          <h3>{id}</h3>
+                        </NodeBox>
+                      )))}
+                    </Box>
+                  }
                 </Box>
               </Box>
             </Box>
