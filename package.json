@@ -1,6 +1,7 @@
 {
-  "name": "vizu",
+  "name": "visual-react",
   "version": "0.1.0",
+  "homepage": "https://shivamsingha.github.io/visual-react/",
   "private": true,
   "dependencies": {
     "enzyme": "^3.8.0",
