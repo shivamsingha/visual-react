@@ -6,6 +6,7 @@ install:
   - yarn install
 
 script:
+  - CI=false
   - yarn test
   - yarn build
 
