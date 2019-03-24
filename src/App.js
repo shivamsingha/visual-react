@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import { 
   Box, 
   Button, 
-  Diagram, 
   Layer,
   Heading, 
   Grommet, 
   ResponsiveContext,
   Collapsible,
-  Stack,
-  Drop,
-  FormField,
-  TextInput
+  Drop
 } from 'grommet';
 import { Next, Previous, FormClose, HostMaintenance, Launch, Trash, Upload, Download } from 'grommet-icons';
 import { NumberInput } from 'grommet-controls';
@@ -44,6 +40,7 @@ const SideBar = (props) => (
     align='center'
     background='accent-1'
     justify='center'
+    width='medium'
     flex='grow'
     responsive
     {...props}
@@ -71,15 +68,7 @@ const NodeBox = ({id, data, exist, ...props}) => (
   />
 );
 
-class closeButton extends Component {
-  renderx() {
-    return(
-      <Box>b</Box>
-    );
-  }
-}
-
-class App extends Component {
+export default class App extends Component {
   state = {
     showSidebar: true,
     status: false,
@@ -88,8 +77,12 @@ class App extends Component {
   }
 
   _create = () => this.setState({status: true, createClicked: false});
+  _remove = () => this.setState({status: false, createClicked: false, sizeval:0});
+  _createSmall = () => this.setState({status: true, createClicked: false, showSidebar: false});
+  _removeSmall = () => this.setState({status: false, createClicked: false, showSidebar: false, sizeval:0});
   onCreate = () => this.setState({createClicked: true});
   onCloseDrop = () => this.setState({createClicked: false});
+  onCloseSideBar = () => this.setState({ showSidebar: false });
   CreateButtonRef = React.createRef();
 
   onSizeInput = event => {
@@ -97,17 +90,53 @@ class App extends Component {
       target: { value }
     } = event;
     let newval = Number(value);
-    //const exp = new RegExp(value, "i");
-    //const suggestions = allSuggestions.filter(s => exp.test(s));
-    this.setState({ sizeval: newval });  //, suggestions });
+    this.setState({ sizeval: newval });
   };
-
-  /*returnStack() {
-    return <linkedlist/>;
-  }*/
+  
+  renderSideBar(size) {
+    const {status, createClicked, sizeval}=this.state;
+    return(
+      <Box fill='horiontal' pad='large'>
+        <Button margin={{vertical: 'small'}} 
+          icon={(status)?<Trash />:<Launch />} label={(status)?'Remove':'Create'} 
+          onClick={(status)?(null):this.onCreate} ref={this.CreateButtonRef} primary
+        />
+        {(createClicked) && //(!status) &&
+          <Drop target={this.CreateButtonRef.current}
+            onClickOutside={this.onCloseDrop}
+            onEsc={this.onCloseDrop}
+          >
+            <Box direction={(size === 'small')?'column':'row'} align='center' pad='small' fill>
+              <Box flex 
+                margin={(size==='small')?{vertical:'medium'}:{horizontal: 'medium'}}
+              >
+                <NumberInput id="size" placeholder="Enter size of stack" 
+                  value={sizeval} min={0}
+                  onChange={this.onSizeInput}
+                />
+              </Box>
+              <Box 
+                flex='shrink'
+                margin={(size==='small')?{vertical:'medium'}:{horizontal: 'medium'}}
+                fill={(size==='small')?'horizontal':false}
+              >
+                <Button label='Create' 
+                  onClick={(status)?(
+                    (size==='small')?this._removeSmall:this._remove)
+                    :(size==='small')?this._createSmall:this._create} 
+                />
+              </Box>
+            </Box>
+          </Drop>
+        }
+        <Button label='Push' icon={<Download />} margin={{vertical: 'small'}} />
+        <Button label='Pop' icon={<Upload />} margin={{vertical: 'small'}} />
+      </Box>
+    );
+  }
 
   render() {
-    const {showSidebar, status, createClicked, sizeval}=this.state;
+    const {showSidebar, status, sizeval}=this.state;
     return (
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
@@ -130,32 +159,7 @@ class App extends Component {
                 {(!showSidebar || size !== 'small') ?(
                     <Collapsible direction='horizontal' open={showSidebar}>
                       <SideBar flex margin='none'>
-                        <Box fill pad='large'>
-                          <Button margin={{vertical: 'small'}} 
-                            icon={(status)?<Trash />:<Launch />} label={(status)?'Remove':'Create'} 
-                            onClick={(status)?(null):this.onCreate} ref={this.CreateButtonRef} primary
-                          />
-                          {(createClicked) && //(!status) &&
-                            <Drop target={this.CreateButtonRef.current}
-                              onClickOutside={this.onCloseDrop}
-                              onEsc={this.onCloseDrop}
-                            >
-                              <Box direction='row' align='center' pad='small' fill>
-                                <Box flex margin={{horizontal: 'medium'}}>
-                                  <NumberInput id="size" placeholder="Enter size of stack" 
-                                    value={sizeval} min={0}
-                                    onChange={this.onSizeInput}
-                                  />
-                                </Box>
-                                <Box flex='shrink' margin={{horizontal: 'medium'}}>
-                                  <Button label='Create' onClick={this._create} />
-                                </Box>
-                              </Box>
-                            </Drop>
-                          }
-                          <Button label='Push' icon={<Download />} margin={{vertical: 'small'}} />
-                          <Button label='Pop' icon={<Upload />} margin={{vertical: 'small'}} />
-                        </Box>
+                        {this.renderSideBar(size)}
                       </SideBar>
                     </Collapsible>
                   ):(
@@ -169,50 +173,22 @@ class App extends Component {
                       >
                         <Button
                           icon={<FormClose />}
-                          onClick={() => this.setState({ showSidebar: false })}
+                          onClick={this.onCloseSideBar}
                         />
                       </Box>
-                      <SideBar fill>
-                        <Box fill={true} pad='large'>
-                          <Button icon={(status)?<Trash />:<Launch />} label={(status)?'Remove':'Create'} 
-                            onClick={(status)?(null):this.onCreate} ref={this.CreateButtonRef} primary
-                          />
-                          {(createClicked) && //(!status) &&
-                            <Drop target={this.CreateButtonRef.current}
-                              onClickOutside={this.onCloseDrop}
-                              onEsc={this.onCloseDrop}
-                            >
-                              <Box direction='row' align='center' pad='small' fill>
-                                <Box flex margin={{horizontal: 'medium'}}>
-                                  <NumberInput id="size" placeholder="Enter size of stack" 
-                                    value={sizeval} min={0}
-                                    onChange={({ target: { sizeval } }) => this.setState({ sizeval: sizeval })}
-                                  />
-                                </Box>
-                                <Box flex='shrink' margin={{horizontal: 'medium'}}>
-                                  <Button label='Create' onClick={this._create} />
-                                </Box>
-                              </Box>
-                            </Drop>
-                          }
-                          <Button label='Push' icon={<Download />} margin={{vertical: 'small'}} />
-                          <Button label='Pop' icon={<Upload />} margin={{vertical: 'small'}} />
-                        </Box>
+                      <SideBar fill='horizontal' >
+                        {this.renderSideBar(size)}
                       </SideBar>
                     </Layer>
                   )}
-                  {(size !== 'small')
-                    ?(
-                      <Box
-                        background='dark-3'
-                        pad='none'
-                      >
-                        <SideBarButton icon={(showSidebar)?(<Previous />):(<Next />)} onClick={() => this.setState({showSidebar: !this.state.showSidebar})}
-                        />
-                      </Box>
-                    ):(null)
-                  }
-                <Box flex align='center' justify='center' margin={{horizontal:'medium', vertical:'none'}}>
+                  {(size !== 'small') && (
+                    <Box background='dark-3' pad='none' >
+                      <SideBarButton icon={(showSidebar)?(<Previous />):(<Next />)} 
+                        onClick={() => this.setState({showSidebar: !this.state.showSidebar})}
+                      />
+                    </Box>
+                  )}
+                <Box flex align='center' justify='center' margin={{horizontal:'medium', vertical:'none'}} pad='medium'>
                   {status && 
                     <Box pad={{horizontal:'xlarge', vertical:'none'}} fill>
                       {(sizeval) && ([...Array(sizeval).keys()].map(id => (
@@ -231,17 +207,3 @@ class App extends Component {
     );
   }
 }
-
-class linkedlist extends Component {
-  render() {
-    return (
-      <Stack fill>
-        <Box>
-          <Box direction='row'>
-          </Box>
-        </Box>
-      </Stack>
-    );
-  }
-}
-export default App;
