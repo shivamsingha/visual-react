@@ -11,6 +11,8 @@ import {
 } from 'grommet';
 import { Next, Previous, FormClose, HostMaintenance, Launch, Trash, Upload, Download } from 'grommet-icons';
 import { NumberInput } from 'grommet-controls';
+import { connect } from "react-redux";
+import { sidebarToggle, sidebarClose } from "./redux/actions";
 
 const theme = {
   global: {
@@ -68,12 +70,15 @@ const NodeBox = ({id, data, exist, ...props}) => (
   />
 );
 
-export default class App extends Component {
-  state = {
-    showSidebar: true,
-    status: false,
-    createClicked:false,
-    sizeval:0
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      //showSidebar: true,
+      status: false,
+      createClicked:false,
+      sizeval:0
+    };
   }
 
   _create = () => this.setState({status: true, createClicked: false});
@@ -82,7 +87,8 @@ export default class App extends Component {
   _removeSmall = () => this.setState({status: false, createClicked: false, showSidebar: false, sizeval:0});
   onCreate = () => this.setState({createClicked: true});
   onCloseDrop = () => this.setState({createClicked: false});
-  onCloseSideBar = () => this.setState({ showSidebar: false });
+  onCloseSideBar = () => this.props.sidebarClose;
+  toggleSideBar = () => this.props.sidebarToggle
   CreateButtonRef = React.createRef();
 
   onSizeInput = event => {
@@ -134,9 +140,9 @@ export default class App extends Component {
       </Box>
     );
   }
-
+  
   render() {
-    const {showSidebar, status, sizeval}=this.state;
+    const { status, sizeval}=this.state;
     return (
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
@@ -152,14 +158,14 @@ export default class App extends Component {
                   pad='none'
                   margin='none'
                 >
-                  <SideBarButton icon={<HostMaintenance />} onClick={() => this.setState({showSidebar: !this.state.showSidebar})} />
+                  <SideBarButton icon={<HostMaintenance />} onClick={this.toggleSideBar} />
                 </Box>
               }
               <Box direction='row-responsive' flex overflow={{horizontal:'hidden'}}>
                 {(!showSidebar || size !== 'small') ?(
                     <Collapsible direction='horizontal' open={showSidebar}>
                       <SideBar flex margin='none'>
-                        {this.renderSideBar(size)}
+                        {null/*this.renderSideBar(size)*/}
                       </SideBar>
                     </Collapsible>
                   ):(
@@ -177,7 +183,7 @@ export default class App extends Component {
                         />
                       </Box>
                       <SideBar fill='horizontal' >
-                        {this.renderSideBar(size)}
+                        {null/*this.renderSideBar(size)*/}
                       </SideBar>
                     </Layer>
                   )}
@@ -207,3 +213,12 @@ export default class App extends Component {
     );
   }
 }
+
+const mapStateToProps = state => ({showSidebar: state.showSidebar});
+function mapDispatchToProps(dispatch) {
+  return{
+    sidebarToggle: showSidebar => dispatch(sidebarToggle(showSidebar))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
