@@ -1,8 +1,10 @@
-import {SIDEBAR_TOGGLE} from "../actionTypes";
-import {SIDEBAR_CLOSE} from "../actionTypes"
+import {SIDEBAR_TOGGLE, SIDEBAR_CLOSE} from "../actionTypes";
 
 const initialState = {
-    showSidebar: true
+    showSidebar: true,
+    status: false,
+    createClicked:false,
+    sizeval:0
 };
 
 const sidebarToggle = (state = initialState, action) => {
