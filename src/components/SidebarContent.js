@@ -19,7 +19,7 @@ class SidebarContent extends Component {
     super(props);
     this.state = {
       displayDrop: false,
-      sizeval: 0,
+      sizeval: 1,
     };
     this.CreateButtonRef = React.createRef();
   }
@@ -27,17 +27,19 @@ class SidebarContent extends Component {
   handleCreate = () => {
     this.props.create(this.state.sizeval);
     this.setState({ displayDrop: false });
+    if (this.props.ViewportSize === 'small')
+      this.props.handleSidebar();
   }
-  handleRemove = () => {
+
+  handleRemove=()=>{
     this.props.remove();
-    this.setState({ displayDrop: false });
+    if (this.props.ViewportSize === 'small')
+      this.props.handleSidebar();
   }
-  _remove = () => this.setState({ status: false, displayDrop: false, sizeval: 0 });
-  _createSmall = () => this.setState({ status: true, displayDrop: false, showSidebar: false });
-  _removeSmall = () => this.setState({ status: false, displayDrop: false, showSidebar: false, sizeval: 0 });
-  onCreate = () => this.setState({ displayDrop: true });
-  onCloseDrop = () => this.setState({ displayDrop: false });
-  onCloseSideBar = () => this.setState({ showSidebar: false });
+
+  handleFocus = (event) => event.target.select();
+  showDrop = () => this.setState({ displayDrop: true });
+  closeDrop = () => this.setState({ displayDrop: false });
 
   onSizeInput = event => {
     const {
@@ -56,15 +58,16 @@ class SidebarContent extends Component {
           margin={{ vertical: 'small' }}
           icon={(Status) ? <Trash /> : <Launch />}
           label={(Status) ? 'Remove' : 'Create'}
-          onClick={(Status) ? (this.handleRemove) : this.onCreate}
+          className={(Status) ? 'remove' : 'create'}
+          onClick={(Status) ? this.handleRemove : this.showDrop}
           ref={this.CreateButtonRef}
           primary
         />
         {(displayDrop) && //(!Status) &&
           <Drop
             target={this.CreateButtonRef.current}
-            onClickOutside={this.onCloseDrop}
-            onEsc={this.onCloseDrop}
+            onClickOutside={this.closeDrop}
+            onEsc={this.closeDrop}
           >
             <Box
               direction={(ViewportSize === 'small') ? 'column' : 'row'}
@@ -79,8 +82,9 @@ class SidebarContent extends Component {
                 <NumberInput
                   id="size"
                   placeholder="Enter size of stack"
-                  value={sizeval} min={0}
+                  value={sizeval} min={1}
                   onChange={this.onSizeInput}
+                  onFocus={this.handleFocus}
                 />
               </Box>
               <Box
@@ -90,9 +94,7 @@ class SidebarContent extends Component {
               >
                 <Button
                   label='Create'
-                  onClick={(Status) ? (
-                    (ViewportSize === 'small') ? this._removeSmall : this.handleRemove)
-                    : (ViewportSize === 'small') ? this._createSmall : this.handleCreate}
+                  onClick={this.handleCreate}
                 />
               </Box>
             </Box>
