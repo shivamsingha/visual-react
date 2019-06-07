@@ -15,7 +15,7 @@ const NodeBox = (props) => (
 
 class MainContent extends Component {
   render() {
-    const { Status, Size } = this.props;
+    const { Status, Memory } = this.props;
     return (
       <Box
         flex
@@ -26,15 +26,17 @@ class MainContent extends Component {
       >
         {Status &&
           <Box pad={{ horizontal: 'xlarge', vertical: 'none' }} fill>
-            {(Size) && ([...Array(Size).keys()].map(id => (
-              <NodeBox id={id} key={id}>
-                <h3>{id}</h3>
+            {Memory.reverse().map((x) =>
+              <NodeBox id={x.id} key={x.id}>
+                <h6>{x.id}</h6>
+                <h3>{x.data}</h3>
               </NodeBox>
-            )))}
+            )}
           </Box>
         }
-        
-      </Box>);
+
+      </Box>
+    );
   }
 }
 
