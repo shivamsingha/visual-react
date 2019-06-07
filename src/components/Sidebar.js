@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SidebarContainer from './SidebarContainer';
 import SidebarContent from './SidebarContent';
 import {
   Box,
@@ -21,11 +20,28 @@ const SideBarButton = (props) => (
   />
 );
 
+const SidebarContainer = (props) => (
+  <Box
+    align='center'
+    background='accent-1'
+    justify='center'
+    width='medium'
+    flex='grow'
+    responsive
+    {...props}
+  />
+);
+
 export default class Sidebar extends Component {
   constructor(props) {
     super(props);
-    this.state = { showSidebar: (this.props.ViewportSize === 'small') ? false : true };
+    this.state = {
+      showSidebar: (this.props.ViewportSize === 'small') ? false : true
+    };
   }
+
+  toggleShowSidebar = () => this.setState({ showSidebar: !this.state.showSidebar });
+
   render() {
     const { showSidebar } = this.state;
     const { ViewportSize } = this.props;
@@ -36,7 +52,7 @@ export default class Sidebar extends Component {
             ? (
               <Collapsible direction='horizontal' open={showSidebar}>
                 <SidebarContainer flex margin='none'>
-                  <SidebarContent ViewportSize={ViewportSize} />
+                  <SidebarContent ViewportSize={ViewportSize} handleSidebar={this.toggleShowSidebar} />
                 </SidebarContainer>
               </Collapsible>
             ) : (
@@ -50,18 +66,19 @@ export default class Sidebar extends Component {
                 >
                   <Button
                     icon={<FormClose />}
-                    onClick={this.onCloseSideBar}
+                    onClick={this.toggleShowSidebar}
                   />
                 </Box>
                 <SidebarContainer fill='horizontal' >
-                  <SidebarContent ViewportSize={ViewportSize} />
+                  <SidebarContent ViewportSize={ViewportSize} handleSidebar={this.toggleShowSidebar} />
                 </SidebarContainer>
               </Layer>
             )
         }
         {(ViewportSize !== 'small') && (
           <Box background='dark-3' pad='none' >
-            <SideBarButton icon={(showSidebar) ? (<Previous />) : (<Next />)}
+            <SideBarButton 
+              icon={(showSidebar) ? (<Previous />) : (<Next />)}
               onClick={() => this.setState({ showSidebar: !this.state.showSidebar })}
             />
           </Box>

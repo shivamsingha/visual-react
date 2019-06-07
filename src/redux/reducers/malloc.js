@@ -2,7 +2,8 @@ import { CREATE, REMOVE } from '../actionTypes';
 
 const initialState = {
   Status: false,
-  Size: 0
+  Size: 0,
+  Memory: [{}]
 }
 
 export default function (state = initialState, action) {
@@ -13,7 +14,15 @@ export default function (state = initialState, action) {
       return {
         ...state,
         Status: true,
-        Size: size
+        Size: size,
+        Memory: Array(size)
+          .fill()
+          .map((_, i, arr) => {
+            arr[i] = {
+              id: i,
+              data: null
+            }
+          })
       };
     }
     case REMOVE: {
