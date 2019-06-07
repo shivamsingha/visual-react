@@ -30,6 +30,9 @@ pages:
   stage: deploy
   script: 
     - yarn build
+    - mv public .public
+    - mkdir public
+    - cp -r build/* public
   artifacts:
     paths:
-      - build
+      - public
