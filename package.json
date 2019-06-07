@@ -5,7 +5,7 @@
     "type": "git",
     "url": "https://gitlab.com/shivamsingha/visual-react.git"
   },
-  "homepage": "https://gitlab.com/shivamsingha/visual-react/",
+  "homepage": "https://shivamsingha.gitlab.io/visual-react/",
   "private": true,
   "dependencies": {
     "enzyme": "^3.8.0",
