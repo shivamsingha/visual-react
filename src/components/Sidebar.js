@@ -36,7 +36,7 @@ export default class Sidebar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSidebar: (this.props.ViewportSize === 'small') ? false : true
+      showSidebar: !(this.props.ViewportSize === 'small')
     };
   }
 
