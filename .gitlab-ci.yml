@@ -2,37 +2,39 @@ image: node:alpine
 
 cache:
   paths:
-    - node_modules/
+  - node_modules/
 
 stages:
-  - build
-  - test
-  - deploy
+- build
+- test
+- deploy
 
 before_script:
-  - CI=false
-  - apk update
-  - apk add yarn
-  - yarn install
+- CI=false
+- apk update
+- apk add yarn
+- yarn install
 
 build:
   stage: build
   script: 
-    - yarn build
+  - yarn build
 
 test:
   stage: test
   script: 
-    - yarn test
+  - yarn test
   coverage: '/^All files\s*\|\s*(\d+\.*\d*)/'
 
 pages:
   stage: deploy
   script: 
-    - yarn build
-    - mv public .public
-    - mkdir public
-    - cp -r build/* public
+  - yarn build
+  - mv public .public
+  - mkdir public
+  - cp -r build/* public
   artifacts:
     paths:
-      - public
+    - public
+  only:
+  - master
