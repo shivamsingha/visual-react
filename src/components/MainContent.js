@@ -2,16 +2,24 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Box,
+  InfiniteScroll
 } from 'grommet';
 
-const NodeBox = (props) => (
-  <Box
-    border={{ style: 'dashed', size: 'small' }}
-    background='accent-2'
-    flex='grow'
-    {...props}
-  />
-);
+const NodeBox = (props) => {
+  const borderStyle = (props.data === '') ? { style: 'dashed' } : { style: 'solid' }
+  return (
+    <Box
+      border={{ ...borderStyle, size: 'small' }}
+      background='light-2'
+      margin={{ horizontal: 'large', top: 'xsmall' }}
+      flex='grow'
+      {...props}
+    >
+      {props.id}  {props.data}
+    </Box>
+  );
+}
+const ImmutableReverse = (arr) => [...arr].reverse();
 
 class MainContent extends Component {
   render() {
@@ -21,17 +29,24 @@ class MainContent extends Component {
         flex
         align='center'
         justify='center'
-        margin={{ horizontal: 'medium', vertical: 'none' }}
-        pad='medium'
       >
+        {console.log(Memory)}
+        {console.log(ImmutableReverse(Memory))}
         {Status &&
-          <Box pad={{ horizontal: 'xlarge', vertical: 'none' }} fill>
-            {Memory.reverse().map((x) =>
-              <NodeBox id={x.id} key={x.id}>
+          <Box
+            overflow='auto'
+            fill>
+            <InfiniteScroll items={ImmutableReverse(Memory)} >
+              {(item) =>
+                <NodeBox id={item.id} key={item.id} data={item.data} />
+              }
+            </InfiniteScroll>
+            {/*ImmutableReverse(Memory).map((x) =>
+              <NodeBox id={x.id} key={x.id} data={x.data} >
                 <h6>{x.id}</h6>
                 <h3>{x.data}</h3>
               </NodeBox>
-            )}
+            )*/}
           </Box>
         }
 
