@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Box,
-  InfiniteScroll
+  InfiniteScroll,
+  Stack,
+  Text
 } from 'grommet';
 
 const NodeBox = (props) => {
@@ -10,12 +12,13 @@ const NodeBox = (props) => {
   return (
     <Box
       border={{ ...borderStyle, size: 'small' }}
-      background='light-2'
-      margin={{ horizontal: 'large', top: 'xsmall' }}
+      background={(props.data === '') ? 'none' : `light-${(props.id % 2) * 2 + 2}`}
+      margin={{ horizontal: 'xsmall', top: 'xsmall' }}
+      height='xsmall'
       flex='grow'
       {...props}
     >
-      {props.id}  {props.data}
+      <Text>{props.data}</Text>
     </Box>
   );
 }
@@ -26,7 +29,7 @@ class MainContent extends Component {
     const { Status, Memory } = this.props;
     return (
       <Box
-        flex
+        flex={{grow:3}}
         align='center'
         justify='center'
       >
@@ -38,7 +41,14 @@ class MainContent extends Component {
             fill>
             <InfiniteScroll items={ImmutableReverse(Memory)} >
               {(item) =>
-                <NodeBox id={item.id} key={item.id} data={item.data} />
+                <Stack anchor='left' key={item.id}>
+                  <NodeBox id={item.id} key={item.id} data={item.data} />
+                  <Box background='brand' round pad='xsmall'>
+                    <Text>
+                      {item.id}
+                    </Text>
+                  </Box>
+                </Stack>
               }
             </InfiniteScroll>
             {/*ImmutableReverse(Memory).map((x) =>

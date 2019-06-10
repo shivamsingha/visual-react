@@ -5,8 +5,7 @@ import {
   Box,
   Button,
   Drop,
-  TextInput,
-  ResponsiveContext
+  TextInput
 } from 'grommet';
 import {
   Launch,
