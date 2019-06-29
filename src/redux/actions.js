@@ -1,4 +1,4 @@
-import { CREATE, REMOVE, POP, PUSH } from './actionTypes';
+import { CREATE, REMOVE, POP, PUSH } from "./actionTypes";
 
 export const create = (size) => ({
   type: CREATE,

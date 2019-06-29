@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { create, remove, npush, npop } from '../redux/actions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { create, remove, npush, npop } from "../redux/actions";
 import {
   Box,
   Button,
   Drop,
   TextInput
-} from 'grommet';
+} from "grommet";
 import {
   Launch,
   Trash,
   Upload,
   Download,
-} from 'grommet-icons';
-import { NumberInput } from 'grommet-controls';
+} from "grommet-icons";
+import { NumberInput } from "grommet-controls";
 
 class SidebarContent extends Component {
   constructor(props) {
@@ -21,8 +21,8 @@ class SidebarContent extends Component {
     this.state = {
       displayCreateDrop: false,
       displayPushDrop: false,
-      sizeval: '',
-      pushval: ''
+      sizeval: "",
+      pushval: ""
     };
     this.CreateButtonRef = React.createRef();
     this.PushButtonRef = React.createRef();
@@ -31,26 +31,26 @@ class SidebarContent extends Component {
   handleCreate = () => {
     this.props.create(this.state.sizeval);
     this.setState({ displayCreateDrop: false });
-    if (this.props.ViewportSize === 'small')
+    if (this.props.ViewportSize === "small")
       this.props.handleSidebar();
   }
 
   handleRemove = () => {
     this.props.remove();
-    if (this.props.ViewportSize === 'small')
+    if (this.props.ViewportSize === "small")
       this.props.handleSidebar();
   }
 
   handlePush = () => {
     this.props.npush(this.state.pushval);
     this.setState({ displayPushDrop: false });
-    if (this.props.ViewportSize === 'small')
+    if (this.props.ViewportSize === "small")
       this.props.handleSidebar();
   }
   
   handlePop = () => {
     this.props.npop();
-    if (this.props.ViewportSize === 'small')
+    if (this.props.ViewportSize === "small")
       this.props.handleSidebar();
   }
 
@@ -74,11 +74,11 @@ class SidebarContent extends Component {
     const { Status, ViewportSize } = this.props;
     const { displayCreateDrop, displayPushDrop, sizeval, pushval } = this.state;
     return (
-      <Box fill pad='large'>
+      <Box fill pad="large">
         <Button
-          margin={{ vertical: 'small' }}
+          margin={{ vertical: "small" }}
           icon={(Status) ? <Trash /> : <Launch />}
-          label={(Status) ? 'Remove' : 'Create'}
+          label={(Status) ? "Remove" : "Create"}
           onClick={(Status) ? this.handleRemove : this.showCreateDrop}
           ref={this.CreateButtonRef}
           primary
@@ -90,14 +90,14 @@ class SidebarContent extends Component {
             onEsc={this.closeCreateDrop}
           >
             <Box
-              direction={(ViewportSize === 'small') ? 'column' : 'row'}
-              align='center'
-              pad='small'
+              direction={(ViewportSize === "small") ? "column" : "row"}
+              align="center"
+              pad="small"
               fill
             >
               <Box
                 flex
-                margin={(ViewportSize === 'small') ? { vertical: 'medium' } : { horizontal: 'medium' }}
+                margin={(ViewportSize === "small") ? { vertical: "medium" } : { horizontal: "medium" }}
               >
                 <NumberInput
                   id="size"
@@ -109,12 +109,12 @@ class SidebarContent extends Component {
                 />
               </Box>
               <Box
-                flex='shrink'
-                margin={(ViewportSize === 'small') ? { vertical: 'medium' } : { horizontal: 'medium' }}
-                fill={(ViewportSize === 'small') ? 'horizontal' : false}
+                flex="shrink"
+                margin={(ViewportSize === "small") ? { vertical: "medium" } : { horizontal: "medium" }}
+                fill={(ViewportSize === "small") ? "horizontal" : false}
               >
                 <Button
-                  label='Create'
+                  label="Create"
                   onClick={this.handleCreate}
                 />
               </Box>
@@ -122,9 +122,9 @@ class SidebarContent extends Component {
           </Drop>
         }
         <Button
-          label='Push'
+          label="Push"
           icon={<Download />}
-          margin={{ vertical: 'small' }}
+          margin={{ vertical: "small" }}
           disabled={!Status}
           onClick={this.showPushDrop}
           ref={this.PushButtonRef}
@@ -136,14 +136,14 @@ class SidebarContent extends Component {
             onEsc={this.closePushDrop}
           >
             <Box
-              direction={(ViewportSize === 'small') ? 'column' : 'row'}
-              align='center'
-              pad='small'
+              direction={(ViewportSize === "small") ? "column" : "row"}
+              align="center"
+              pad="small"
               fill
             >
               <Box
                 flex
-                margin={(ViewportSize === 'small') ? { vertical: 'medium' } : { horizontal: 'medium' }}
+                margin={(ViewportSize === "small") ? { vertical: "medium" } : { horizontal: "medium" }}
               >
                 <TextInput
                   id="size"
@@ -154,12 +154,12 @@ class SidebarContent extends Component {
                 />
               </Box>
               <Box
-                flex='shrink'
-                margin={(ViewportSize === 'small') ? { vertical: 'medium' } : { horizontal: 'medium' }}
-                fill={(ViewportSize === 'small') ? 'horizontal' : false}
+                flex="shrink"
+                margin={(ViewportSize === "small") ? { vertical: "medium" } : { horizontal: "medium" }}
+                fill={(ViewportSize === "small") ? "horizontal" : false}
               >
                 <Button
-                  label='Push'
+                  label="Push"
                   onClick={this.handlePush}
                 />
               </Box>
@@ -167,9 +167,9 @@ class SidebarContent extends Component {
           </Drop>
         }
         <Button
-          label='Pop'
+          label="Pop"
           icon={<Upload />}
-          margin={{ vertical: 'small' }}
+          margin={{ vertical: "small" }}
           disabled={!Status}
           onClick={this.handlePop}
         />

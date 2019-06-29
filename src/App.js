@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   AppBar, 
   Sidebar,
   MainContent
-} from './components';
+} from "./components";
 import {
   Box,
   Heading,
   Grommet,
   ResponsiveContext,
-} from 'grommet';
+} from "grommet";
 
 const theme = {
   global: {
     font: {
-      family: 'Roboto',
-      size: '14px',
-      height: '20px',
+      family: "Roboto",
+      size: "14px",
+      height: "20px",
     },
   },
 };
@@ -30,21 +30,21 @@ class App extends Component {
             <Box fill>
               <AppBar>
                 Texteru
-                <Heading level='3' margin='none'>Heading</Heading>
+                <Heading level="3" margin="none">Heading</Heading>
               </AppBar>
-              {(ViewportSize === 'small') &&
+              {(ViewportSize === "small") &&
                 <Box
-                  background='dark-3'
-                  pad='none'
-                  margin='none'
+                  background="dark-3"
+                  pad="none"
+                  margin="none"
                 >
                   {/*<SideBarButton icon={<HostMaintenance />} onClick={() => this.setState({ showSidebar: !this.state.showSidebar })} />*/}
                 </Box>
               }
               <Box
-                direction='row-responsive'
+                direction="row-responsive"
                 flex
-                overflow={{ horizontal: 'hidden' }}
+                overflow={{ horizontal: "hidden" }}
               >
                 <Sidebar ViewportSize={ViewportSize} />
                 <MainContent />

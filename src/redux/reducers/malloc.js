@@ -1,10 +1,10 @@
-import { CREATE, REMOVE, POP, PUSH } from '../actionTypes';
+import { CREATE, REMOVE, POP, PUSH } from "../actionTypes";
 
 const initialState = {
   Status: false,
   Size: 0,
   Top: -1,
-  LastOutput: '',
+  LastOutput: "",
   Memory: Array(0)
 }
 
@@ -21,7 +21,7 @@ export default function (state = initialState, action) {
           .fill()
           .map((_, i, arr) => ({
               id: i,
-              data: ''
+              data: ""
             }))
       };
     }
@@ -71,7 +71,7 @@ export default function (state = initialState, action) {
       let output = temp[Top].data;
       temp[Top] = {
         ...temp[Top],
-        data: ''
+        data: ""
       };
 
       return {

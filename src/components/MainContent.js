@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 import {
   Box,
   InfiniteScroll,
   Stack,
   Text
-} from 'grommet';
+} from "grommet";
 
 const NodeBox = (props) => {
-  const borderStyle = (props.data === '') ? { style: 'dashed' } : { style: 'solid' }
+  const borderStyle = (props.data === "") ? { style: "dashed" } : { style: "solid" }
   return (
     <Box
-      border={{ ...borderStyle, size: 'small' }}
-      background={(props.data === '') ? 'none' : `light-${(props.id % 2) * 2 + 2}`}
-      margin={{ horizontal: 'xsmall', top: 'xsmall' }}
-      height='xsmall'
-      flex='grow'
+      border={{ ...borderStyle, size: "small" }}
+      background={(props.data === "") ? "none" : `light-${(props.id % 2) * 2 + 2}`}
+      margin={{ horizontal: "xsmall", top: "xsmall" }}
+      height="xsmall"
+      flex="grow"
       {...props}
     >
       <Text>{props.data}</Text>
@@ -30,20 +30,20 @@ class MainContent extends Component {
     return (
       <Box
         flex={{grow:3}}
-        align='center'
-        justify='center'
+        align="center"
+        justify="center"
       >
         {console.log(Memory)}
         {console.log(ImmutableReverse(Memory))}
         {Status &&
           <Box
-            overflow='auto'
+            overflow="auto"
             fill>
             <InfiniteScroll items={ImmutableReverse(Memory)} >
               {(item) =>
-                <Stack anchor='left' key={item.id}>
+                <Stack anchor="left" key={item.id}>
                   <NodeBox id={item.id} key={item.id} data={item.data} />
-                  <Box background='brand' round pad='xsmall'>
+                  <Box background="brand" round pad="xsmall">
                     <Text>
                       {item.id}
                     </Text>
