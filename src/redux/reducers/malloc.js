@@ -6,7 +6,7 @@ const initialState = {
   Top: -1,
   LastOutput: "",
   Memory: Array(0)
-}
+};
 
 export default function (state = initialState, action) {
   const { type, payload } = action;
@@ -68,7 +68,7 @@ export default function (state = initialState, action) {
         return state;
 
       let temp = Memory;
-      let output = temp[Top].data;
+      const output = temp[Top].data;
       temp[Top] = {
         ...temp[Top],
         data: ""

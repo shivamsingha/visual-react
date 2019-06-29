@@ -8,7 +8,7 @@ import {
 } from "grommet";
 
 const NodeBox = (props) => {
-  const borderStyle = (props.data === "") ? { style: "dashed" } : { style: "solid" }
+  const borderStyle = (props.data === "") ? { style: "dashed" } : { style: "solid" };
   return (
     <Box
       border={{ ...borderStyle, size: "small" }}
@@ -21,8 +21,8 @@ const NodeBox = (props) => {
       <Text>{props.data}</Text>
     </Box>
   );
-}
-const ImmutableReverse = (arr) => [...arr].reverse();
+};
+const immutableReverse = (arr) => [...arr].reverse();
 
 class MainContent extends Component {
   render() {
@@ -33,13 +33,11 @@ class MainContent extends Component {
         align="center"
         justify="center"
       >
-        {console.log(Memory)}
-        {console.log(ImmutableReverse(Memory))}
         {Status &&
           <Box
             overflow="auto"
             fill>
-            <InfiniteScroll items={ImmutableReverse(Memory)} >
+            <InfiniteScroll items={immutableReverse(Memory)} >
               {(item) =>
                 <Stack anchor="left" key={item.id}>
                   <NodeBox id={item.id} key={item.id} data={item.data} />
@@ -51,7 +49,7 @@ class MainContent extends Component {
                 </Stack>
               }
             </InfiniteScroll>
-            {/*ImmutableReverse(Memory).map((x) =>
+            {/*immutableReverse(Memory).map((x) =>
               <NodeBox id={x.id} key={x.id} data={x.data} >
                 <h6>{x.id}</h6>
                 <h3>{x.data}</h3>

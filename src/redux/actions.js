@@ -20,4 +20,4 @@ export const npush = (data) => ({
 
 export const npop = () => ({
   type: POP
-})
+});

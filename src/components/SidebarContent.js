@@ -59,8 +59,8 @@ class SidebarContent extends Component {
   closeCreateDrop = () => this.setState({ displayCreateDrop: false });
   showPushDrop = () => this.setState({ displayPushDrop: true });
   closePushDrop = () => this.setState({ displayPushDrop: false });
-  onPushInput = e => this.setState({ pushval: e.target.value });
-  onSizeInput = e => this.setState({ sizeval: Number(e.target.value) });
+  onPushInput = (e) => this.setState({ pushval: e.target.value });
+  onSizeInput = (e) => this.setState({ sizeval: Number(e.target.value) });
 
   /*onSizeInput = event => {
     const {
@@ -178,7 +178,7 @@ class SidebarContent extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({ ...state.malloc })
+const mapStateToProps = (state) => ({ ...state.malloc });
 
 export default connect(
   mapStateToProps,

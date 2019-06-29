@@ -84,6 +84,6 @@ export default class Sidebar extends Component {
           </Box>
         )}
       </Box>
-    )
+    );
   }
 }

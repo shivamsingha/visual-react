@@ -26,7 +26,7 @@ class App extends Component {
     return (
       <Grommet theme={theme} full>
         <ResponsiveContext.Consumer>
-          {ViewportSize => (
+          {(ViewportSize) => (
             <Box fill>
               <AppBar>
                 Texteru
